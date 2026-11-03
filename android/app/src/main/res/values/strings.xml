@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">FORMIQ</string>
+    <string name="title_activity_main">FORMIQ</string>
+    <string name="package_name">com.formiq.app</string>
+    <string name="custom_url_scheme">com.formiq.app</string>
+</resources>

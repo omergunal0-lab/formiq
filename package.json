@@ -1,0 +1,28 @@
+{
+  "name": "formiq",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FORMIQ - kişisel fitness takip ve koç uygulaması",
+  "scripts": {
+    "icons": "node scripts/make-icons.js && npx @capacitor/assets generate --iconBackgroundColor '#0f2a1a' --iconBackgroundColorDark '#0f2a1a' --splashBackgroundColor '#0f2a1a' --splashBackgroundColorDark '#0a0d0b'",
+    "sync": "npx cap sync",
+    "android": "npx cap sync android && npx cap open android",
+    "ios": "npx cap sync ios && npx cap open ios",
+    "serve": "npx http-server www -p 8080 -c-1"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/ios": "^8.6.0",
+    "@capacitor/keyboard": "^8.0.6",
+    "@capacitor/local-notifications": "^8.3.1",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.4"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^4.0.0",
+    "@capacitor/cli": "^8.6.0"
+  }
+}
