@@ -1,6 +1,6 @@
 {
   "name": "formiq",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "FORMIQ - kişisel fitness takip ve koç uygulaması",
   "scripts": {
@@ -8,7 +8,8 @@
     "sync": "npx cap sync",
     "android": "npx cap sync android && npx cap open android",
     "ios": "npx cap sync ios && npx cap open ios",
-    "serve": "npx http-server www -p 8080 -c-1"
+    "serve": "npx http-server www -p 8080 -c-1",
+    "vendor": "cp node_modules/@supabase/supabase-js/dist/umd/supabase.js www/vendor/supabase.js"
   },
   "dependencies": {
     "@capacitor/android": "^8.6.0",
@@ -19,7 +20,8 @@
     "@capacitor/keyboard": "^8.0.6",
     "@capacitor/local-notifications": "^8.3.1",
     "@capacitor/splash-screen": "^8.0.2",
-    "@capacitor/status-bar": "^8.0.4"
+    "@capacitor/status-bar": "^8.0.4",
+    "@supabase/supabase-js": "^2.118.0"
   },
   "devDependencies": {
     "@capacitor/assets": "^4.0.0",

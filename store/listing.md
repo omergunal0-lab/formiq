@@ -39,7 +39,7 @@ FORMIQ, spor yapan herkesin ihtiyaç duyduğu her şeyi tek bir uygulamada topla
 • "Bugün ne yemeliyim?", "Bu hafta nasıl gidiyorum?" gibi sorulara kısa, net cevaplar
 
 🔒 GİZLİLİK
-Hesap gerekmez. Verilerin cihazında kalır.
+Verilerin hesabına güvenle yedeklenir; istersen hesapsız da kullanabilirsin. Hesabını ve verilerini uygulama içinden tek dokunuşla silebilirsin.
 
 FORMIQ tıbbi tavsiye vermez. Yeni bir programa başlamadan önce bir sağlık uzmanına danışın.
 
@@ -54,11 +54,14 @@ fitness,spor,antrenman,kalori,protein,diyet,gym,kas,kilo,takip,program,koç,su,u
 - App Store: 4+ (or 12+) · Google Play: Everyone (PEGI 3)
 
 ## Gizlilik formu (App Store "App Privacy" / Google Play "Data safety")
-- Toplanan veri: yok (her şey cihazda saklanıyor).
-- Yapay zekâ koçu kullanılırsa: soru metni ve kullanıcının veri özeti yalnızca cevap üretmek için yapay zekâ sağlayıcısına gönderilir. Bu veri kimlikle eşleştirilmez ve takip amaçlı kullanılmaz.
-  - App Store: "Health & Fitness" + "Other User Content" → "Not linked to the user" (kullanıcıyla eşleştirilmiyor), amaç "App Functionality" (uygulama işlevi).
-  - Google Play: "Health and fitness" + "Messages/other user content" → paylaşılıyor, toplanmıyor, aktarımda şifreli.
-- Gizlilik politikası adresi: www/privacy.html dosyasını herkese açık bir adreste yayınlaman gerekiyor (GitHub Pages olur).
+Toplanan veriler (hepsi yalnızca **uygulama işlevi** için, takip/reklam yok, satılmıyor):
+- **İletişim bilgisi → E-posta adresi, Ad:** hesap için. Kullanıcıyla eşleşir.
+- **Sağlık ve fitness:** antrenman, kilo, ölçüler, beslenme, uyku. Yedekleme için. Kullanıcıyla eşleşir.
+- **Kullanıcı içeriği → Diğer:** koça yazılan sorular. Cevap üretmek için yapay zekâ sağlayıcısına iletilir.
+- Aktarım sırasında şifreli: **Evet** · Kullanıcı silme talep edebilir: **Evet** (uygulama içinden "Hesabı sil")
+- Google Play'in istediği **hesap silme adresi:** `www/delete-account.html` sayfasının yayınlandığı adres
+- **Gizlilik politikası adresi:** `www/privacy.html` sayfasının yayınlandığı adres
+- Apple incelemesi için **demo hesap** bilgisi gir (App Review Information → Sign-in required): bir test e-postası ve şifresi.
 
 ## Ekran görüntüleri
 `store/screenshots/`

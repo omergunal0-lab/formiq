@@ -1,11 +1,10 @@
-/* FORMIQ app settings.
-   aiEndpoint: address of the AI coach server (server/ folder, Cloudflare Worker).
-               Leave it empty and the coach / food calculation shows "not set up yet".
-   appKey:     must match the worker's APP_KEY secret.
-   privacyUrl: the public address of the privacy policy (required by the stores). */
+/* FORMIQ ayarları. Supabase → Project Settings → API (veya "Connect") sayfasındaki
+   Project URL ve anon (publishable) anahtarı buraya yazılır. Bu anahtarın uygulamada durması güvenlidir;
+   veritabanı supabase/setup.sql içindeki kurallarla korunur.
+   Boş bırakılırsa uygulama hesapsız çalışır (veriler sadece cihazda, koç kapalı). */
 window.FORMIQ_CONFIG = {
-  version: "1.0.0",
-  aiEndpoint: "",
-  appKey: "",
+  version: "1.1.0",
+  supabaseUrl: "",
+  supabaseAnonKey: "",
   privacyUrl: "privacy.html"
 };
