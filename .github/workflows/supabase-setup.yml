@@ -75,9 +75,9 @@ jobs:
 
       - name: Coach server (Edge Function)
         run: |
-          npx --yes supabase@latest functions deploy coach --project-ref "$REF" --use-api --no-verify-jwt
+          npx --yes supabase@latest functions deploy coach --project-ref "$REF" --use-api --no-verify-jwt --yes
           if [ -n "$ANTHROPIC_API_KEY" ]; then
-            npx --yes supabase@latest secrets set ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" --project-ref "$REF"
+            npx --yes supabase@latest secrets set ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" --project-ref "$REF" --yes
             echo "Coach is on"
           else
             echo "::warning::ANTHROPIC_API_KEY is not set yet, so the coach will say it is not set up. Add the secret and run this again."
