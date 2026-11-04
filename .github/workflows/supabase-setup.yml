@@ -33,9 +33,17 @@ jobs:
       - name: Database tables and rules
         run: |
           jq -n --rawfile q supabase/setup.sql '{query: $q}' > /tmp/q.json
-          curl -fsS -X POST "$API/database/query" \
+          code=$(curl -sS -o /tmp/out.txt -w "%{http_code}" -X POST "$API/database/query" \
             -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" \
-            --data @/tmp/q.json > /dev/null
+            --data @/tmp/q.json)
+          if [ "$code" -ge 300 ]; then
+            case "$code" in
+              401) echo "::error::Supabase rejected SUPABASE_ACCESS_TOKEN (401). Create a new token at supabase.com/dashboard/account/tokens and update the secret." ;;
+              403|404) echo "::error::Supabase says this project is not found or not allowed ($code). Check SUPABASE_PROJECT_REF and that the token belongs to the same account." ;;
+              *) echo "::error::Database setup failed ($code): $(head -c 600 /tmp/out.txt)" ;;
+            esac
+            exit 1
+          fi
           echo "Database ready"
 
       - name: Sign-in settings and Turkish email templates
