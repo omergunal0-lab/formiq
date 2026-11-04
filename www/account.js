@@ -2,18 +2,26 @@
    cloud backup (Supabase), sign out and account deletion.
    Loaded before app.js; uses app.js variables (st, render, sv ...) only inside functions. */
 const ACF = window.FORMIQ_CONFIG || {};
+/* "Beni hatırla": on → the session is kept until sign-out; off → it ends when the app is closed. */
+const remembered = () => { try { return localStorage.getItem("fit_rem") !== "0"; } catch (e) { return true; } };
+const authStore = {
+  getItem: (k) => { try { return localStorage.getItem(k) ?? sessionStorage.getItem(k); } catch (e) { return null; } },
+  setItem: (k, v) => { try { if (remembered()) { localStorage.setItem(k, v); sessionStorage.removeItem(k); } else { sessionStorage.setItem(k, v); localStorage.removeItem(k); } } catch (e) {} },
+  removeItem: (k) => { try { localStorage.removeItem(k); sessionStorage.removeItem(k); } catch (e) {} },
+};
 const SB = (ACF.supabaseUrl && ACF.supabaseAnonKey && window.supabase)
   ? window.supabase.createClient(ACF.supabaseUrl, ACF.supabaseAnonKey, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: "formiq-auth" },
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: "formiq-auth", storage: authStore },
     })
   : null;
 
 let sess = null;
 let guest = false;
-try { guest = localStorage.getItem("fit_guest") === "1"; } catch (e) {}
-const AU = { ready: !SB, v: "welcome", name: "", email: "", pw: "", pw2: "", code: "", ok: false, show: false, err: "", msg: "", busy: false, left: null, lo: false, del: false };
+try { localStorage.removeItem("fit_guest"); } catch (e) {}
+let lastEmail = ""; try { lastEmail = localStorage.getItem("fit_email") || ""; } catch (e) {}
+const AU = { ready: !SB, v: "login", rem: remembered(), name: "", email: lastEmail, pw: "", pw2: "", code: "", ok: false, show: false, err: "", msg: "", busy: false, left: null, lo: false, del: false };
 
-const needAuth = () => !!SB && !sess && !guest;
+const needAuth = () => !!SB && !sess;
 const emailOk = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
 
 function authErr(e) {
@@ -34,17 +42,10 @@ const fld = (k, label, type, ph, ac, extra) => `<label>${label}</label><div clas
 const pwType = () => (AU.show ? "text" : "password");
 const btn = (go, label) => `<button class="p ab" data-ago="${go}" ${AU.busy ? "disabled" : ""}>${AU.busy ? '<span class="spin"></span>' : label}</button>`;
 const note = () => (AU.err ? `<div class="aerr">${esc(AU.err)}</div>` : "") + (AU.msg ? `<div class="amsg">${esc(AU.msg)}</div>` : "");
-const back = (to) => `<button class="aback" data-av="${to || "welcome"}" aria-label="Geri">‹</button>`;
+const back = (to) => `<button class="aback" data-av="${to || "login"}" aria-label="Geri">‹</button>`;
 
 function authv() {
   const v = AU.v;
-  if (v === "welcome") return `<div class="auth aw">
-    <div class="ob-hero">${LOGO}<h2>FORMIQ</h2><div class="t">Antrenman, beslenme ve ilerlemen tek yerde.<br>Kişisel koçun cebinde.</div></div>
-    <div class="feat">${[["🏋️", "Sana özel program ve akıllı antrenman takibi"], ["🍽️", "Kalori, protein, su ve uyku takibi"], ["🤖", "Verilerini okuyan yapay zekâ koçu"], ["☁️", "Verilerin hesabına yedeklenir, telefon değişse de kaybolmaz"]].map((x) => `<div><span>${x[0]}</span>${x[1]}</div>`).join("")}</div>
-    <button class="p ab" data-av="signup">Ücretsiz hesap oluştur</button>
-    <button class="ab" data-av="login">Giriş yap</button>
-    <button class="alink" data-aguest="1">Hesapsız devam et</button></div>`;
-
   if (v === "signup") return `<div class="auth">${back()}<h2>Hesap oluştur</h2><div class="t">Birkaç saniye sürer.</div><div class="c">
     ${fld("name", "Adın", "text", "örn: Ömer", "given-name", 'maxlength="24"')}
     ${fld("email", "E-posta", "email", "ornek@mail.com", "email", 'inputmode="email" autocapitalize="off"')}
@@ -54,9 +55,11 @@ function authv() {
     ${note()}${btn("signup", "Hesap oluştur")}</div>
     <button class="alink" data-av="login">Zaten hesabın var mı? <b>Giriş yap</b></button></div>`;
 
-  if (v === "login") return `<div class="auth">${back()}<h2>Tekrar hoş geldin</h2><div class="t">Hesabına giriş yap.</div><div class="c">
-    ${fld("email", "E-posta", "email", "ornek@mail.com", "email", 'inputmode="email" autocapitalize="off"')}
+  if (v === "login") return `<div class="auth al">
+    <div class="ob-hero">${LOGO}<h2>FORMIQ</h2><div class="t">Antrenman, beslenme ve ilerlemen tek yerde.</div></div><div class="c">
+    ${fld("email", "E-posta", "email", "ornek@mail.com", "username", 'inputmode="email" autocapitalize="off"')}
     ${fld("pw", "Şifre", pwType(), "Şifren", "current-password")}
+    <button class="chk ${AU.rem ? "on" : ""}" data-arem="1"><span>${AU.rem ? "✓" : ""}</span><div><b>Beni hatırla</b><br><span class="t">Açıkken çıkış yapana kadar tekrar şifre sorulmaz.</span></div></button>
     ${note()}${btn("login", "Giriş yap")}
     <button class="alink" data-av="forgot">Şifremi unuttum</button></div>
     <button class="alink" data-av="signup">Hesabın yok mu? <b>Hesap oluştur</b></button></div>`;
@@ -86,8 +89,7 @@ function acctCard() {
   if (!sess) return `<div class="c"><h3>☁️ Hesap</h3><div class="tip">Hesapsız kullanıyorsun. Verilerin sadece bu cihazda. Ücretsiz hesap oluşturursan verilerin yedeklenir ve koçu kullanabilirsin.</div><div class="row"><button class="p" data-asignup="1">Hesap oluştur</button><button data-alogin="1">Giriş yap</button></div></div>`;
   const u = sess.user;
   return `<div class="c"><h3>☁️ Hesap</h3><div class="n">${esc((u.user_metadata && u.user_metadata.name) || "")}</div><div class="t">${esc(u.email || "")}</div><div class="tip">${saveErr ? "⚠️ Son değişiklikler henüz yedeklenmedi. İnternete bağlanınca tekrar denenecek." : "✓ Verilerin hesabına yedekleniyor."}</div>
-  <div class="row"><button data-alogout="1">${AU.lo ? "Emin misin? Çıkış yap" : "Çıkış yap"}</button><button data-adel="1" style="color:var(--red)">${AU.del ? "Hesap kalıcı olarak silinsin mi? Evet" : "Hesabı sil"}</button></div>
-  ${AU.del ? '<div class="tip" style="color:var(--red)">Hesabın ve tüm yedeklenmiş verilerin kalıcı olarak silinir. Bu işlem geri alınamaz.</div>' : ""}</div>`;
+  <div class="row"><button data-alogout="1">Çıkış yap</button><button data-adel="1" class="dng">Hesabı sil</button></div></div>`;
 }
 
 /* Coach view banner */
@@ -114,6 +116,7 @@ async function syncPull() {
   const { data, error } = await SB.from("user_state").select("data").eq("user_id", uid).maybeSingle();
   if (error) { saveErr = true; dref = makeRef(uid); return; }
   const remote = data && data.data;
+  if (st._uid && st._uid !== uid) { replaceLocal({}); }
   if (remote && (st._uid !== uid || !localHas() || (remote._ts || 0) >= (st._ts || 0))) {
     replaceLocal(remote);
   } else {
@@ -190,23 +193,21 @@ document.addEventListener("click", async (e) => {
   if (d.av) { AU.v = d.av; AU.err = AU.msg = ""; render(); return; }
   if (d.apw) { AU.show = !AU.show; render(); return; }
   if (d.aok) { AU.ok = !AU.ok; render(); return; }
-  if (d.aguest) { guest = true; try { localStorage.setItem("fit_guest", "1"); } catch (x) {} render(); return; }
+  if (d.arem) { AU.rem = !AU.rem; render(); return; }
   if (d.asignup || d.alogin) { guest = false; try { localStorage.removeItem("fit_guest"); } catch (x) {} AU.v = d.asignup ? "signup" : "login"; AU.err = AU.msg = ""; render(); return; }
   if (d.alogout) {
-    if (!AU.lo) { AU.lo = true; AU.del = false; render(); return; }
-    AU.lo = false;
+    if (!(await confirmBox("Çıkış yapılsın mı?", "Verilerin hesabında kalır. Tekrar giriş yapınca geri gelir.", "Çıkış yap", false))) return;
     try { if (dref) await dref.set(JSON.parse(JSON.stringify(st))); } catch (x) {}
     await SB.auth.signOut().catch(() => {});
-    sess = null; wipeLocal(); AU.v = "welcome"; render(); toast("Çıkış yapıldı");
+    sess = null; wipeLocal(); AU.v = "login"; AU.pw = ""; render(); toast("Çıkış yapıldı");
     return;
   }
   if (d.adel) {
-    if (!AU.del) { AU.del = true; AU.lo = false; render(); return; }
-    AU.del = false;
+    if (!(await confirmBox("Hesabın kalıcı olarak silinsin mi?", "Hesabın ve yedeklenmiş tüm verilerin silinir. Bu işlem geri alınamaz.", "Hesabı sil"))) return;
     const { error } = await SB.rpc("delete_my_account");
     if (error) { toast(authErr(error)); return; }
     await SB.auth.signOut().catch(() => {});
-    sess = null; wipeLocal(); AU.v = "welcome"; render(); toast("Hesabın ve verilerin silindi");
+    sess = null; wipeLocal(); AU.v = "login"; AU.pw = ""; AU.email = ""; render(); toast("Hesabın ve verilerin silindi");
     return;
   }
   if (d.aresend) {
@@ -243,6 +244,7 @@ document.addEventListener("click", async (e) => {
 
   try {
     if (go === "signup") {
+      try { localStorage.setItem("fit_rem", "1"); localStorage.setItem("fit_email", email); } catch (x) {}
       const { data, error } = await SB.auth.signUp({ email, password: AU.pw, options: { data: { name: AU.name.trim() } } });
       if (error) return fail(authErr(error));
       if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) return fail(authErr("already registered"));
@@ -251,6 +253,7 @@ document.addEventListener("click", async (e) => {
       AU.v = "code"; AU.code = ""; render(); return;
     }
     if (go === "login") {
+      try { localStorage.setItem("fit_rem", AU.rem ? "1" : "0"); localStorage.setItem("fit_email", email); } catch (x) {}
       const { data, error } = await SB.auth.signInWithPassword({ email, password: AU.pw });
       if (error) {
         if (/not confirmed/i.test(error.message || "")) {

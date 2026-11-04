@@ -1,6 +1,6 @@
 {
   "name": "formiq",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "description": "FORMIQ - kişisel fitness takip ve koç uygulaması",
   "scripts": {
