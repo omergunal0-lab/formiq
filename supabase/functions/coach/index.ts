@@ -43,6 +43,7 @@ const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") return json({ error: "method" }, 405);
+  if (!Deno.env.get("ANTHROPIC_API_KEY")) return json({ error: "ai-off" }, 503);
 
   // 1) Who is calling?
   const token = (req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");

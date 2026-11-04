@@ -42,7 +42,7 @@ const LI=f.length?`<ul>${f.map((x,i)=>`<li>${x.n||'Öğün'}: ${x.k} kcal, ${x.p
 const pb=(v,m)=>m?`<div class="pb"><i style="width:${Math.min(v/m*100,100)}%"></i></div>`:"";
 return `${waterCard(true,fd)}<div class="c" style="display:flex;align-items:center;gap:8px"><button data-fn="-1">‹</button><b style="flex:1;text-align:center">${fl(fd)}</b><button data-fn="1" ${fd>=td()?'disabled':''}>›</button></div>
 <div class="c"><h3>${fl(fd)} toplam</h3><div class="n">🔥 ${K} ${t.k?'/ '+t.k:''} kcal</div>${pb(K,t.k)}<div class="n">🥩 ${P} ${t.p?'/ '+t.p:''} g protein</div>${pb(P,t.p)}${f.length?`<ul>${f.map((x,i)=>`<li>${x.n||'Öğün'}: ${x.k} kcal, ${x.p} g <a href="#" data-fe="${i}">düzenle</a> · <a href="#" data-fs="${i}">⭐</a> · <a href="#" data-fd="${i}">sil</a></li>`).join("")}</ul>`:'<div class="tip">Bu gün için kayıt yok.</div>'}</div>
-${fqCard()}<div class="c"><h3>✍️ Ne yedin? (${fl(fd)})</h3><input id="ft" class="w" placeholder="örn: 2 yumurta, 1 dilim ekmek, 150 g tavuk göğsü"><div class="row"><button class="p" data-fc="1">Hesapla</button></div><div class="tip" id="fm">Yazdıklarının kalori ve proteinini tahmin eder. Değerler yaklaşıktır, porsiyonu yazarsan daha doğru olur.</div></div>
+${fqCard()}<div class="c"><h3>✍️ Ne yedin? (${fl(fd)})</h3><input id="ft" class="w" placeholder="örn: 2 yumurta, 1 dilim ekmek, 150 g tavuk göğsü"><div class="row"><button class="p" data-fc="1">Hesapla</button></div><div class="tip" id="fm">Virgülle ayırarak yaz: <b>2 yumurta, 1 dilim ekmek, 150 g tavuk</b>. Uygulama 240'tan fazla yiyeceği kendi tanır (internetsiz, ücretsiz). Değerler yaklaşıktır.</div></div>
 ${favCard()}<div class="c"><h3>${e?'Öğünü düzenle':'Elle ekle'}</h3><div class="row"><div><label>Ad</label><input id="fn" style="width:110px" value="${qa(e&&e.n)}"></div><div><label>kcal</label><input id="fk" type="number" inputmode="numeric" value="${qa(e&&e.k)}"></div><div><label>Protein g</label><input id="fp" type="number" inputmode="numeric" value="${qa(e&&e.p)}"></div><button class="p" data-fa="1">${e?'Güncelle':'Ekle'}</button>${e?'<button data-fx="1">İptal</button>':''}</div></div>
 <div class="c"><h3>📋 ${fl(fd)} yediklerin</h3>${LI}</div>
 <div class="c"><h3>Günlük hedefler</h3><div class="row"><div><label>kcal</label><input id="tk" type="number" value="${t.k||''}"></div><div><label>Protein g</label><input id="tp" type="number" value="${t.p||''}"></div><button data-ts="1">Kaydet</button></div><div class="tip">Başlangıç hedefi: 2200 kcal, 160 g protein. 2-3 hafta sonra kilo düşmüyorsa kaloriyi ~150 azalt.</div></div>`}
@@ -55,15 +55,41 @@ if(SB&&!AU.ready){$h.style.display='none';$n.innerHTML='';$m.innerHTML='';return
 if(needAuth()){$h.style.display='none';$n.innerHTML='';$m.innerHTML=authv();return}
 head();nav();if(!st.prof&&!ss){document.querySelector('.hd').style.display='none';document.getElementById('nav').innerHTML='';document.getElementById('main').innerHTML=obv();return}document.querySelector(".hd").style.display=(ss||tab!="h")?"none":"";if(ss){document.getElementById("nav").innerHTML="";document.getElementById("main").innerHTML=ss.fin?sumv():sessv();return}document.getElementById("main").innerHTML=ttl()+{h:home,e:edv,r:badgesv,s:setv,m:more,w:work,y:histv,l:lib,p:progs,f:food,b:body,c:coachv,g:guide}[tab]()}
 function tick(){const l=Math.round((tEnd-Date.now())/1000),b=document.getElementById("tb");if(l<=0){clearInterval(iv);b.classList.remove("rest");document.getElementById("tt").textContent="Hazır, devam! 💥";FX.success();setTimeout(()=>b.classList.remove("on"),2500)}else document.getElementById("tt").textContent="⏱ Dinlen: "+fm(l)}
+/* Free, offline food parser: "2 yumurta, 1 dilim ekmek, 150 g tavuk" → items from FOODS */
+const trl=t=>String(t).toLocaleLowerCase("tr-TR").replace(/[’'`]/g,"");
+const NUMW={"yarım":.5,"bir":1,"iki":2,"üç":3,"dört":4,"beş":5,"altı":6,"yedi":7,"sekiz":8,"dokuz":9,"on":10,"çeyrek":.25,"buçuk":.5};
+const UNITW=/^(adet|tane|dilim|kase|porsiyon|bardak|kupa|fincan|kaşık|kaşığı|avuç|top|kutu|paket|ölçek|şişe|kadeh|koçan|tabak|parça|orta|büyük|küçük|tam|dolu)$/;
+const STOP=new Set(["ve","ile","bir","az","biraz","çok","yanında","üstüne","tane","adet","pişmiş","porsiyon","dilim","kase","bardak"]);
+let _fidx=null;
+const fidx=()=>_fidx||(_fidx=FOODS.map((f,i)=>{const main=trl(f.n.replace(/\(.*?\)/g," ")).split(/[^a-zçğıöşü0-9]+/).filter(w=>w.length>1),all=trl(f.n).split(/[^a-zçğıöşü0-9]+/).filter(w=>w.length>1),u=trl(f.u),g=(u.match(/(\d+(?:[.,]\d+)?)\s*(g|ml)\b/)||[]),c=(u.match(/^(\d+(?:[.,]\d+)?)/)||[])[1];
+return{f,i,main,all,gram:g[1]?+g[1].replace(",","."):null,count:/^yarım/.test(u)?.5:c?+c.replace(",","."):1,pure:/^\d+\s*(g|ml)$/.test(u.trim())}}));
+const wm=(w,t)=>w===t||w.startsWith(t)||(t.length>=5&&w.startsWith(t.slice(0,-1)))||(w.length>=4&&t.startsWith(w));
+function parseItem(raw){let t=" "+trl(raw).replace(/(\d),(\d)/g,"$1.$2").replace(/\b(yemek|tatlı|çay)\s+kaşı(k|ğı)\b/g," kaşık ")+" ",qty=null,unit="n",m;
+if((m=t.match(/(\d+(?:\.\d+)?)\s*(kg|g|gr|gram|ml|l|lt|litre)\b/))){qty=+m[1];unit=m[2];if(unit=="kg"){qty*=1000;unit="g"}else if(/^(l|lt|litre)$/.test(unit)){qty*=1000;unit="ml"}else if(unit!="ml")unit="g";t=t.replace(m[0]," ")}
+else if((m=t.match(/(\d+(?:\.\d+)?)/))){qty=+m[1];t=t.replace(m[0]," ");if(/\bbuçuk\b/.test(t))qty+=.5}
+else{for(const k in NUMW){if(new RegExp("(^|\\s)"+k+"(\\s|$)").test(t)&&k!="buçuk"){qty=NUMW[k];t=t.replace(new RegExp("(^|\\s)"+k+"(\\s|$)")," ");break}}}
+const words=t.split(/[^a-zçğıöşü0-9]+/).filter(w=>w.length>1&&!STOP.has(w)&&!UNITW.test(w));if(!words.length)return raw.trim()?{miss:raw.trim()}:null;
+let best=null,bs=0;fidx().forEach(o=>{if(!o.main.length)return;let sc=words.some(w=>wm(w,o.main[0]))?2:o.main.slice(1).some(tk=>words.some(w=>wm(w,tk)))?1:0;if(!sc)return;if(words.includes(o.main[0]))sc+=.5;o.all.slice(1).forEach(tk=>{if(words.some(w=>wm(w,tk)))sc+=1});o.main.slice(1).forEach(tk=>{if(!words.some(w=>wm(w,tk)))sc-=.6});if(sc>bs){bs=sc;best=o}});
+if(!best)return{miss:raw.trim()};
+let mult=1,lbl=best.f.u;if(qty!=null){if(unit!="n"&&best.gram){mult=qty/best.gram;lbl=qty+" "+(unit=="ml"?"ml":"g")}else if(unit!="n"){mult=qty/100;lbl=qty+" "+unit}else{mult=best.pure?qty:qty/best.count;lbl=best.pure?qty+" × "+best.f.u:qty+" "+best.f.u.replace(/^(\d+(?:[.,]\d+)?|yarım)\s*/,"")}}
+return{item:{n:best.f.n+" · "+lbl,k:Math.round(best.f.k*mult),p:Math.round(best.f.p*mult)}}}
+const splitNum=x=>{const m=x.match(/^(.*?\d.*?\S)\s+(\d+(?:[.,]\d+)?\s+(?!(?:g|gr|gram|kg|ml|l|lt)\b)\S.*)$/i);return m?[m[1]].concat(splitNum(m[2])):[x]};
+function localFood(v){const parts=v.split(/,|;|\n|\+|\s+ve\s+|\s+ile\s+/i).map(x=>x.trim()).filter(Boolean).flatMap(splitNum),items=[],miss=[];parts.forEach(x=>{const r=parseItem(x);if(!r)return;r.item?items.push(r.item):miss.push(r.miss)});return{items,miss}}
 async function calc(){const v=$v("ft").trim(),m=document.getElementById("fm");if(!v){m.textContent="Önce ne yediğini yaz.";return}
-m.textContent="Hesaplanıyor… (10-20 sn sürebilir)";
+const loc=localFood(v),addAll=(a,extra)=>{(st.food[fd]=st.food[fd]||[]).push(...a);sv();render();const m2=document.getElementById("fm");if(m2)m2.innerHTML="✅ Eklendi: "+esc(a.map(x=>x.n+" ("+x.k+" kcal, "+x.p+" g)").join(", "))+(extra?"<br>"+extra:"")};
+if(loc.items.length&&!loc.miss.length){addAll(loc.items);return}
+const missTxt=loc.miss.length?"Tanınmayan: <b>"+esc(loc.miss.join(", "))+"</b>. Bunları “Hızlı ara”dan seçebilir veya elle ekleyebilirsin.":"";
+const canAi=(SB&&sess)||(window.claude&&window.claude.use);
+if(!canAi){if(loc.items.length)addAll(loc.items,missTxt);else m.innerHTML="Tanıyamadım: <b>"+esc(loc.miss.join(", "))+"</b>. “Hızlı ara”dan seçebilir veya elle ekleyebilirsin.";return}
+const vAi=loc.miss.join(", ");
+m.textContent="Hesaplanıyor…";
 let step="başlangıç";
-try{step="istek";const r=await ai(`Aşağıdaki yemek listesini ayrı kalemlere böl ve her kalem için yaklaşık kalori (kcal) ile protein (g) tahmin et. Porsiyon yazılmamışsa Türkiye’deki tipik porsiyonu varsay. Sadece JSON dizi döndür, başka hiçbir metin yazma: [{"n":"kalem adı (porsiyonla)","k":0,"p":0}] (k ve p tamsayı). Liste: ${v}`,"food",v);
+try{step="istek";const r=await ai(`Aşağıdaki yemek listesini ayrı kalemlere böl ve her kalem için yaklaşık kalori (kcal) ile protein (g) tahmin et. Porsiyon yazılmamışsa Türkiye’deki tipik porsiyonu varsay. Sadece JSON dizi döndür, başka hiçbir metin yazma: [{"n":"kalem adı (porsiyonla)","k":0,"p":0}] (k ve p tamsayı). Liste: ${vAi}`,"food",vAi);
 step="çözümleme";const tx=String(r||""),a0=tx.indexOf("["),a1=tx.lastIndexOf("]");let arr=JSON.parse(tx.slice(a0,a1+1));
 const a=(Array.isArray(arr)?arr:[]).filter(x=>x&&isFinite(+x.k)&&isFinite(+x.p)).map(x=>({n:String(x.n||"Öğün").slice(0,60),k:Math.round(+x.k),p:Math.round(+x.p)}));
-if(!a.length){m.textContent="Anlayamadım, biraz daha net yazar mısın?";return}
-(st.food[fd]=st.food[fd]||[]).push(...a);sv();render();const m2=document.getElementById("fm");if(m2)m2.textContent="✅ Eklendi: "+a.map(x=>x.n+" ("+x.k+" kcal, "+x.p+" g)").join(", ")}
-catch(e){m.textContent="Hesaplanamadı ("+er(e)+"). Hızlı aramadan veya elle ekleyebilirsin."}}
+if(!a.length&&!loc.items.length){m.textContent="Anlayamadım, biraz daha net yazar mısın?";return}
+addAll(loc.items.concat(a))}
+catch(e){if(loc.items.length)addAll(loc.items,missTxt);else m.innerHTML="Tanıyamadım: <b>"+esc(loc.miss.join(", "))+"</b>. “Hızlı ara”dan seçebilir veya elle ekleyebilirsin."}}
 const R={G:["Göğüs",10,20],S:["Sırt",10,20],O:["Omuz",8,16],B:["Biceps",6,12],T:["Triceps",6,12],K:["Karın",6,12],Q:["Ön bacak",8,16],H:["Arka bacak",6,12],P:["Kalça",6,12],C:["Baldır",6,12]};
 const LB=`Bench press|barbell bench press|G|OT|150
 E\u011fik dumbbell press|incline dumbbell press|G|OT|90
@@ -216,7 +242,7 @@ async function ai(p,task,input){const W=window;
 if(SB){const tk=await accessToken();const ac=new AbortController(),to=setTimeout(()=>ac.abort(),60000);
 try{const r=await fetch(ACF.supabaseUrl+"/functions/v1/coach",{method:"POST",signal:ac.signal,headers:{"content-type":"application/json",authorization:"Bearer "+tk,apikey:ACF.supabaseAnonKey},body:JSON.stringify({task:task||"coach",prompt:task=="food"?"":p,input:input||""})});
 let j={};try{j=await r.json()}catch(x){}if(j.left!=null)AU.left=j.left;
-if(r.status==401)throw new Error("login-needed");if(r.status==429)throw new Error(j.error=="quota"?"quota":"rate");if(!r.ok)throw new Error("network "+r.status);return String(j.text||"").trim()}
+if(r.status==401)throw new Error("login-needed");if(j.error=="ai-off")throw new Error("ai-off");if(r.status==429)throw new Error(j.error=="quota"?"quota":"rate");if(!r.ok)throw new Error("network "+r.status);return String(j.text||"").trim()}
 catch(e){throw e&&e.name=="AbortError"?new Error("timeout"):e}finally{clearTimeout(to)}}
 if(W.claude&&W.claude.use){const sm=await W.claude.use("sample");if(sm){const r=await sm(p);return String(r&&r.text||r||"").trim()}}
 throw new Error("ai-off")}
@@ -482,7 +508,183 @@ Dondurma|1 top|140|2
 Çay (şekersiz)|1 bardak|2|0
 Türk kahvesi (şekersiz)|1 fincan|5|0
 Kola|330 ml|140|0
-Meyve suyu|200 ml|90|1`.split("\n").map(l=>{const a=l.split("|");return{n:a[0],u:a[1],k:+a[2],p:+a[3]}});
+Meyve suyu|200 ml|90|1
+Yumurta sarısı|1 adet|55|3
+Haşlanmış yumurta beyazı omlet|3 yumurta akı|52|11
+Sucuklu yumurta|1 porsiyon (2 yumurta)|340|19
+Sucuk|30 g|140|6
+Pastırma|30 g|75|9
+Hindi füme|30 g|35|6
+Salam|30 g|90|4
+Sosis|1 adet (50 g)|130|5
+Tavuk şiş|1 porsiyon (200 g)|330|50
+Tavuk sote|1 porsiyon (250 g)|300|35
+Izgara tavuk kanat|100 g|210|25
+Tavuk döner (porsiyon)|1 porsiyon (150 g)|310|30
+Et döner (porsiyon)|1 porsiyon (150 g)|370|28
+Adana kebap|1 porsiyon (180 g)|520|34
+Urfa kebap|1 porsiyon (180 g)|500|34
+İskender|1 porsiyon|750|40
+Kuzu pirzola|100 g|290|24
+Kıymalı makarna|1 porsiyon (250 g)|420|20
+Etli nohut|1 porsiyon (250 g)|330|20
+Etli kuru fasulye|1 porsiyon (250 g)|330|19
+Taze fasulye (zeytinyağlı)|1 porsiyon (200 g)|140|4
+Karnıyarık|1 porsiyon|320|12
+İmam bayıldı|1 porsiyon|260|4
+Dolma (zeytinyağlı)|5 adet|220|4
+Sarma (zeytinyağlı)|5 adet|200|4
+Türlü|1 porsiyon (250 g)|180|5
+Ispanak yemeği|1 porsiyon (200 g)|150|7
+Pırasa (zeytinyağlı)|1 porsiyon (200 g)|160|3
+Mücver|2 adet|200|7
+Patates kızartması|1 porsiyon (150 g)|420|5
+Patates püresi|1 porsiyon (200 g)|210|4
+Fırın patates|1 porsiyon (200 g)|190|4
+Ezogelin çorbası|1 kase (250 ml)|170|8
+Tavuk çorbası|1 kase (250 ml)|130|9
+Domates çorbası|1 kase (250 ml)|130|3
+Yayla çorbası|1 kase (250 ml)|150|6
+İşkembe çorbası|1 kase (250 ml)|190|13
+Kısır|1 porsiyon (150 g)|230|5
+Çoban salata|1 porsiyon (200 g)|110|2
+Mevsim salata|1 porsiyon (200 g)|90|2
+Ton balıklı salata|1 porsiyon|280|25
+Sezar salata|1 porsiyon|380|20
+Cacık|1 kase (200 g)|110|6
+Haydari|2 yemek kaşığı|70|3
+Pide (kaşarlı)|1 adet|650|26
+Pide (kıymalı)|1 adet|700|33
+Kumpir|1 adet|750|20
+Börek (peynirli)|1 dilim (120 g)|360|12
+Su böreği|1 dilim (150 g)|420|16
+Gözleme (peynirli)|1 adet|450|17
+Açma|1 adet|300|6
+Kruvasan|1 adet|270|5
+Bazlama|1 adet|300|9
+Lavaş|1 adet|170|5
+Tortilla|1 adet|140|4
+Ekmek (çavdar)|1 dilim (30 g)|70|3
+Ekmek (kepekli)|1 dilim (30 g)|70|4
+Galeta|5 adet|90|3
+Pirinç (haşlanmış)|100 g|130|3
+Bulgur (haşlanmış)|100 g|85|3
+Makarna (kuru)|100 g|360|12
+Erişte|1 porsiyon (150 g)|240|8
+Kinoa (pişmiş)|100 g|120|4
+Mısır gevreği|40 g|150|3
+Müsli|50 g|190|5
+Yulaf lapası (sütlü)|1 kase|260|11
+Pankek|2 adet|230|6
+Tost ekmeği|1 dilim|75|2
+Kaşarlı tost|1 adet|300|13
+Kavurmalı tost|1 adet|380|18
+Hamburger köftesi|1 adet (100 g)|250|18
+Pizza (karışık)|1 dilim|300|13
+Lahmacun (dürüm)|1 adet|280|13
+Çiğ köfte dürüm|1 adet|330|8
+Falafel|5 adet|330|13
+Cips|1 paket (40 g)|210|3
+Kraker|5 adet|80|2
+Bisküvi|3 adet|130|2
+Gofret|1 adet|170|2
+Sütlü çikolata|30 g|160|2
+Lokum|2 adet|90|0
+Helva|50 g|250|6
+Künefe|1 porsiyon|560|12
+Kek|1 dilim|250|4
+Pasta (yaş)|1 dilim|350|5
+Kazandibi|1 kase|230|6
+Profiterol|1 porsiyon|400|7
+Puding|1 kase|180|5
+Tahin|1 yemek kaşığı|90|3
+Pekmez|1 yemek kaşığı|60|0
+Tahin pekmez|2 yemek kaşığı|150|3
+Reçel|1 yemek kaşığı|50|0
+Nutella|1 yemek kaşığı (20 g)|110|1
+Krem peynir|1 yemek kaşığı (30 g)|70|2
+Labne|2 yemek kaşığı (30 g)|60|2
+Tulum peyniri|30 g|110|7
+Lor (light)|100 g|80|12
+Mozzarella|30 g|85|6
+Cottage peyniri|100 g|98|11
+Skyr / yüksek proteinli yoğurt|1 kutu (150 g)|90|15
+Protein puding|1 kutu|160|20
+Protein shake (sütle)|1 bardak|250|32
+Süt (tam yağlı)|1 bardak (200 ml)|125|7
+Süt (light)|1 bardak (200 ml)|70|7
+Laktozsuz süt|1 bardak (200 ml)|95|7
+Badem sütü|1 bardak (200 ml)|30|1
+Latte|1 bardak (300 ml)|190|10
+Cappuccino|1 bardak (250 ml)|120|6
+Filtre kahve|1 kupa|5|0
+Americano|1 kupa|10|0
+Sahlep|1 bardak|200|5
+Portakal suyu (taze)|1 bardak (200 ml)|90|1
+Limonata|1 bardak (250 ml)|110|0
+Enerji içeceği|250 ml|110|0
+Soda|200 ml|0|0
+Bira|330 ml|140|1
+Şarap|1 kadeh (150 ml)|125|0
+Rakı|1 kadeh (50 ml)|130|0
+Mandalina|1 adet|45|1
+Armut|1 adet|100|1
+Şeftali|1 adet|60|1
+Kayısı|3 adet|50|1
+Erik|5 adet|60|1
+Kiraz|100 g|63|1
+Karpuz|1 dilim (300 g)|90|2
+Kavun|1 dilim (250 g)|85|2
+Ananas|100 g|50|1
+Kivi|1 adet|45|1
+Nar|yarım adet|70|1
+İncir|2 adet|75|1
+Hurma|3 adet|70|1
+Kuru üzüm|30 g|90|1
+Kuru kayısı|5 adet|85|1
+Yaban mersini|100 g|57|1
+Domates|1 orta|22|1
+Salatalık|1 orta|30|1
+Biber|1 adet|20|1
+Havuç|1 orta|25|1
+Brokoli (haşlanmış)|100 g|35|3
+Mantar|100 g|22|3
+Mısır (haşlanmış)|1 koçan|90|3
+Bezelye|100 g|80|5
+Edamame|100 g|120|11
+Kaju|30 g|165|5
+Antep fıstığı|30 g|170|6
+Yer fıstığı|30 g|170|7
+Leblebi|30 g|110|6
+Ay çekirdeği|30 g|170|6
+Kabak çekirdeği|30 g|160|9
+Chia tohumu|1 yemek kaşığı|60|2
+Keten tohumu|1 yemek kaşığı|55|2
+Kreatin|5 g|0|0
+BCAA|1 ölçek|10|0
+Mayonez|1 yemek kaşığı|95|0
+Ketçap|1 yemek kaşığı|20|0
+Şeker|1 çay kaşığı|16|0
+Uskumru (ızgara)|100 g|260|24
+Hamsi (tava)|1 porsiyon (150 g)|330|25
+Karides|100 g|100|20
+Midye dolma|5 adet|200|7
+Sardalya (konserve)|1 kutu|190|23
+Tofu|100 g|80|9
+Lazanya|1 porsiyon (250 g)|420|22
+Hünkar beğendi|1 porsiyon|520|30
+Tantuni|1 dürüm|450|28
+Kokoreç|yarım ekmek|550|22
+Islak hamburger|1 adet|300|12
+Tavuk burger|1 adet|450|24
+Wrap (tavuklu)|1 adet|450|30
+Kumru|1 adet|500|22
+Pişi|1 adet|200|4
+Waffle|1 adet|550|9
+Sushi|8 parça|300|12
+Noodle|1 porsiyon|450|12
+Çorba (ortalama)|1 kase (250 ml)|150|6
+Yemek (ev yemeği, ortalama)|1 porsiyon|350|15`.split("\n").map(l=>{const a=l.split("|");return{n:a[0],u:a[1],k:+a[2],p:+a[3]}});
 function fres(q){q=(q||"").trim().toLocaleLowerCase("tr-TR");const all=FOODS.map((x,i)=>({x,i})),l=q?all.filter(o=>(o.x.n+" "+o.x.u).toLocaleLowerCase("tr-TR").includes(q)).slice(0,12):all.slice(0,6);
 return (q?'':'<div class="t">Sık kullanılanlar · yazarak ara</div>')+(l.length?l.map(o=>`<div class="row" style="align-items:center;border-top:1px solid var(--bd);padding-top:6px;margin:6px 0 0"><div style="flex:1"><b>${esc(o.x.n)}</b><div class="t">${esc(o.x.u)} · ${o.x.k} kcal · ${o.x.p} g protein</div></div><button class="p" data-fadd="${o.i}">＋ Ekle</button></div>`).join(""):'<div class="tip">Sonuç yok. “Hesapla” ile yazdığını hesaplatabilir veya aşağıdan elle ekleyebilirsin.</div>')}
 const fqCard=()=>`<div class="c"><h3>🔎 Hızlı ara</h3><input class="w" data-fq="1" placeholder="örn: yumurta, tavuk, pilav…" autocomplete="off"><div class="row"><div><label>Porsiyon ×</label><input id="fqm" type="number" step="0.5" inputmode="decimal" value="1"></div></div><div id="fres">${fres("")}</div><div class="t" style="margin-top:6px">Değerler yaklaşıktır.</div></div>`;
