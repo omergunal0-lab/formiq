@@ -1,0 +1,73 @@
+name: Supabase setup
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["supabase/**"]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    env:
+      REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      SENDER_EMAIL: ${{ vars.SENDER_EMAIL }}
+      SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+      API: https://api.supabase.com/v1/projects/${{ secrets.SUPABASE_PROJECT_REF }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check secrets
+        run: |
+          if [ -z "$REF" ] || [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
+            echo "::error::Add SUPABASE_PROJECT_REF and SUPABASE_ACCESS_TOKEN under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      - name: Database tables and rules
+        run: |
+          jq -n --rawfile q supabase/setup.sql '{query: $q}' > /tmp/q.json
+          curl -fsS -X POST "$API/database/query" \
+            -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" \
+            --data @/tmp/q.json > /dev/null
+          echo "Database ready"
+
+      - name: Sign-in settings and Turkish email templates
+        run: |
+          jq -n --rawfile c supabase/templates/confirm.html --rawfile r supabase/templates/recovery.html '{
+            password_min_length: 8,
+            mailer_subjects_confirmation: "FORMIQ doğrulama kodun: {{ .Token }}",
+            mailer_templates_confirmation_content: $c,
+            mailer_subjects_recovery: "FORMIQ şifre sıfırlama kodun: {{ .Token }}",
+            mailer_templates_recovery_content: $r
+          }' > /tmp/auth.json
+          if [ -n "$RESEND_API_KEY" ]; then
+            jq --arg k "$RESEND_API_KEY" --arg s "${SENDER_EMAIL:-onboarding@resend.dev}" \
+              '. + {smtp_host:"smtp.resend.com", smtp_port:"465", smtp_user:"resend", smtp_pass:$k, smtp_admin_email:$s, smtp_sender_name:"FORMIQ"}' \
+              /tmp/auth.json > /tmp/auth2.json && mv /tmp/auth2.json /tmp/auth.json
+            echo "Custom email sender (Resend) will be enabled"
+          fi
+          jq --arg u "$SITE_URL" '. + {site_url:$u}' /tmp/auth.json > /tmp/auth2.json && mv /tmp/auth2.json /tmp/auth.json
+          patch() { curl -sS -o /tmp/out.txt -w "%{http_code}" -X PATCH "$API/config/auth" \
+            -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" --data @"$1"; }
+          code=$(patch /tmp/auth.json)
+          if [ "$code" -ge 300 ]; then
+            echo "::warning::Email templates could not be changed ($code: $(cat /tmp/out.txt)). Sign-up emails will contain a link instead of a code; the app supports both."
+            jq '{password_min_length, site_url}' /tmp/auth.json > /tmp/auth-min.json
+            code=$(patch /tmp/auth-min.json)
+            [ "$code" -lt 300 ] || { echo "::error::Auth settings failed ($code): $(cat /tmp/out.txt)"; exit 1; }
+          fi
+          echo "Auth settings updated"
+
+      - name: Coach server (Edge Function)
+        run: |
+          npx --yes supabase@latest functions deploy coach --project-ref "$REF" --use-api --no-verify-jwt
+          if [ -n "$ANTHROPIC_API_KEY" ]; then
+            npx --yes supabase@latest secrets set ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" --project-ref "$REF"
+            echo "Coach is on"
+          else
+            echo "::warning::ANTHROPIC_API_KEY is not set yet, so the coach will say it is not set up. Add the secret and run this again."
+          fi

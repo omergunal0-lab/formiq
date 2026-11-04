@@ -64,7 +64,8 @@ function authv() {
   if (v === "code") return `<div class="auth">${back("signup")}<h2>E-postanı doğrula</h2><div class="t"><b>${esc(AU.email)}</b> adresine bir doğrulama kodu gönderdik. Gelen kutunu (ve spam klasörünü) kontrol et.</div><div class="c">
     ${fld("code", "Doğrulama kodu", "text", "123456", "one-time-code", 'inputmode="numeric" maxlength="8"')}
     ${note()}${btn("code", "Doğrula ve başla")}
-    <button class="alink" data-aresend="signup" ${AU.busy ? "disabled" : ""}>Kod gelmedi mi? <b>Tekrar gönder</b></button></div></div>`;
+    <button class="alink" data-aresend="signup" ${AU.busy ? "disabled" : ""}>Kod gelmedi mi? <b>Tekrar gönder</b></button>
+    ${AU.pw ? `<button class="alink" data-ago="linkdone" ${AU.busy ? "disabled" : ""}>E-postada kod yerine bağlantı mı var? Bağlantıya dokun, sonra <b>buraya dön ve giriş yap</b></button>` : ""}</div></div>`;
 
   if (v === "forgot") return `<div class="auth">${back("login")}<h2>Şifreni sıfırla</h2><div class="t">E-posta adresine bir sıfırlama kodu göndereceğiz.</div><div class="c">
     ${fld("email", "E-posta", "email", "ornek@mail.com", "email", 'inputmode="email" autocapitalize="off"')}
@@ -219,7 +220,7 @@ document.addEventListener("click", async (e) => {
   const go = d.ago, email = AU.email.trim().toLowerCase();
   AU.err = AU.msg = "";
   const fail = (m) => { AU.err = m; AU.busy = false; render(); };
-  if (go !== "code" && go !== "reset" && !emailOk(email)) return fail("Geçerli bir e-posta adresi yaz.");
+  if (go !== "code" && go !== "reset" && go !== "linkdone" && !emailOk(email)) return fail("Geçerli bir e-posta adresi yaz.");
   if (go === "signup") {
     if (AU.name.trim().length < 2) return fail("Adını yaz.");
     if (AU.pw.length < 8) return fail("Şifre en az 8 karakter olmalı.");
@@ -228,6 +229,12 @@ document.addEventListener("click", async (e) => {
   }
   if (go === "login" && !AU.pw) return fail("Şifreni yaz.");
   if ((go === "code" || go === "reset") && !/^\d{6,8}$/.test(AU.code.trim())) return fail("E-postana gelen kodu yaz.");
+  if (go === "linkdone") {
+    AU.busy = true; render();
+    const { data, error } = await SB.auth.signInWithPassword({ email: AU.email, password: AU.pw });
+    if (error) return fail(/not confirmed/i.test(error.message || "") ? "Hesap henüz doğrulanmadı. Önce e-postadaki bağlantıya dokun." : authErr(error));
+    AU.busy = false; await onSignedIn(data.session); toast("✅ Hesabın hazır"); return;
+  }
   if (go === "reset") {
     if (AU.pw.length < 8) return fail("Şifre en az 8 karakter olmalı.");
     if (AU.pw !== AU.pw2) return fail("Şifreler aynı değil.");

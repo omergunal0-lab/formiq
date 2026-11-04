@@ -1,5 +1,7 @@
 # FORMIQ: sıfırdan mağazaya rehber
 
+> **iPhone kullanıyorsan ve bilgisayarın yoksa** önce `IPHONE-KURULUM.md` dosyasını izle: Supabase kurulumu orada otomatik yapılıyor, bu dosyadaki 2-4. adımlara gerek kalmıyor.
+
 Bu rehber daha önce hiç uygulama yayınlamamış biri için yazıldı. Adımları sırayla izle. Takıldığın yerde Claude'a "X. adımda takıldım" yazman yeterli.
 
 ## Büyük resim: hangi parça ne işe yarıyor?

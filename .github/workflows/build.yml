@@ -17,6 +17,11 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 21 }
       - run: npm ci
+      - name: Write Supabase settings into config.js
+        env:
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: ./scripts/write-config.sh
       - run: npx cap sync android
 
       - name: Test APK (debug, installable on any phone)
@@ -53,6 +58,11 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: npm ci
+      - name: Write Supabase settings into config.js
+        env:
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: ./scripts/write-config.sh
       - run: npx cap sync ios
       - name: Build for iOS simulator (checks that the project compiles)
         working-directory: ios/App
