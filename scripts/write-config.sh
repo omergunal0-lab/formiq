@@ -7,6 +7,7 @@ if [ -z "$REF" ] || [ -z "${SUPABASE_ACCESS_TOKEN:-}" ]; then
   echo "Supabase secrets not set; keeping www/config.js as is (app runs without accounts)."
   exit 0
 fi
+source "$(dirname "$0")/clean-ref.sh"
 KEYS=$(curl -fsS -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" "https://api.supabase.com/v1/projects/$REF/api-keys")
 ANON=$(echo "$KEYS" | jq -r '[.[] | select(.name=="anon" or .type=="publishable")][0].api_key // empty')
 if [ -z "$ANON" ]; then echo "Could not read the anon key from Supabase"; exit 1; fi

@@ -16,7 +16,6 @@ jobs:
       RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
       SENDER_EMAIL: ${{ vars.SENDER_EMAIL }}
       SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
-      API: https://api.supabase.com/v1/projects/${{ secrets.SUPABASE_PROJECT_REF }}
     steps:
       - uses: actions/checkout@v4
 
@@ -26,6 +25,10 @@ jobs:
             echo "::error::Add SUPABASE_PROJECT_REF and SUPABASE_ACCESS_TOKEN under Settings → Secrets and variables → Actions."
             exit 1
           fi
+          source scripts/clean-ref.sh
+          echo "REF=$REF" >> "$GITHUB_ENV"
+          echo "SUPABASE_ACCESS_TOKEN=$SUPABASE_ACCESS_TOKEN" >> "$GITHUB_ENV"
+          echo "API=https://api.supabase.com/v1/projects/$REF" >> "$GITHUB_ENV"
 
       - name: Database tables and rules
         run: |
