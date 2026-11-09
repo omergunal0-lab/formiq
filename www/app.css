@@ -281,3 +281,63 @@ button.dng-p{background:var(--red);border-color:var(--red);color:#fff;font-weigh
 .tbb{display:flex;gap:6px}
 .tb:not(.rest) #tm15,.tb:not(.rest) #tp15{display:none}
 .setrow input{font-size:15px;padding:9px 8px}
+
+/* ---------- v1.3: simpler screens + muscle balance ---------- */
+h3{display:flex;align-items:center;gap:0}
+h3 .hi{flex:none;display:inline-grid;place-items:center;width:30px;height:30px;margin-right:10px;border-radius:10px;background:var(--in);font-size:15px;line-height:1}
+.c{padding:16px 16px 14px}
+.ql{display:grid;gap:4px;margin-top:4px}
+.qi{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--bd)}
+.qi:first-child{border-top:0}
+.qe{flex:none;width:36px;height:36px;border-radius:11px;background:var(--in);display:grid;place-items:center;font-size:18px}
+.qv{flex:1;min-width:0;display:flex;flex-direction:column}
+.qv b{font-size:15px}.qv small{color:var(--mu);font-size:12px}
+.qb{display:flex;gap:6px;align-items:center}
+.qb input{width:78px;min-height:36px;padding:6px 10px;font-size:15px}
+.qb button.p{box-shadow:none}
+.seg{display:flex;gap:4px;padding:4px;margin:4px 0 12px;background:var(--in);border-radius:14px}
+.seg button{flex:1;min-height:36px;padding:6px 4px;border:0;background:none;box-shadow:none;border-radius:11px;font-size:13.5px;color:var(--mu)}
+.seg button.on{background:var(--card);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+:root[data-theme="dark"] .seg button.on{color:var(--tx)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .seg button.on{color:var(--tx)}}
+.seg5{margin:0 0 12px}
+.seg5 button{font-size:12.5px}
+.mac{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 4px}
+.mac b{font-size:20px;letter-spacing:-.02em}
+.mac .pb{margin:6px 0 0}
+.fl{margin-top:8px}
+.fi{display:flex;align-items:center;gap:6px;padding:10px 0;border-top:1px solid var(--bd)}
+.fi:first-child{border-top:0}
+.ib{flex:none;width:36px;min-height:36px;padding:0;border:0;background:var(--in);border-radius:10px;font-size:15px;box-shadow:none}
+details.c>summary{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:2px 0}
+details.c>summary::before{display:none}
+details.c[open]>summary{margin-bottom:8px}
+.ghost{width:100%;background:none;border:1px dashed var(--bd);box-shadow:none;color:var(--mu);margin-bottom:12px}
+.mmini{display:flex;align-items:center;gap:14px;width:100%;text-align:left;font-weight:500}
+.mmm{flex:none;width:104px}
+.mmap{max-width:300px;margin:8px auto 0}
+.lgd{display:flex;justify-content:center;gap:16px;font-size:12px;color:var(--mu);margin-top:4px}
+.lgd i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.score{flex:none;text-align:right;line-height:1}
+.score b{font-size:30px;letter-spacing:-.03em;color:var(--ac)}
+.score span{font-size:13px;color:var(--mu)}
+.mst{flex:none;display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:8px}
+.mst.yok{background:var(--in);color:var(--mu)}
+.mst.eksik{background:var(--ac2s);color:var(--ac2)}
+.mst.iyi{background:var(--acs);color:var(--ac)}
+.mst.fazla{background:color-mix(in srgb,var(--red) 14%,transparent);color:var(--red)}
+.sumr{display:flex;align-items:baseline;gap:8px;margin:6px 0}
+.ins{display:flex;gap:10px;padding:10px 0;border-top:1px solid var(--bd);margin-top:6px}
+.ins>span{flex:none;width:32px;height:32px;border-radius:10px;background:var(--in);display:grid;place-items:center}
+.sug{padding:8px 0;border-top:1px solid var(--bd)}
+.sug:first-of-type{border-top:0}
+.mr{padding:7px 0}
+.mrh{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.mrh b{flex:1;font-size:14px}
+.mb{position:relative;height:10px;border-radius:6px;background:var(--in);overflow:hidden}
+.mb .band{position:absolute;top:0;bottom:0;background:var(--acs)}
+.mb .fill{position:absolute;left:0;top:3px;bottom:3px;border-radius:4px;transition:width .6s var(--ease)}
+.trd{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--bd)}
+.trd .up{color:var(--ac)}.trd .flat{color:var(--mu)}
+.top>div:has(>[data-cw]){display:flex;gap:6px;flex:none}
+.top>div>[data-cw]{width:36px;min-height:36px;padding:0}
