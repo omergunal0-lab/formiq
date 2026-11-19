@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Çerkezköy Teklif Panosu</title>
+<style>
+:root { --bg:#f6f5f2; --kart:#fff; --yazi:#1c1c1a; --soluk:#6b6a65; --vurgu:#1f7a4d; --cizgi:#e4e2dc }
+@media (prefers-color-scheme: dark) { :root { --bg:#141413; --kart:#1d1d1b; --yazi:#f1efe9; --soluk:#a3a19a; --vurgu:#3fb27a; --cizgi:#2e2d2a } }
+* { box-sizing:border-box; margin:0 }
+body { background:var(--bg); color:var(--yazi); font:15px/1.55 system-ui, sans-serif; padding:32px 16px }
+.kap { max-width:1100px; margin:auto }
+header h1 { font-size:1.8rem } header p { color:var(--soluk); margin-top:6px }
+.fiyat { display:flex; gap:12px; margin:20px 0 28px; flex-wrap:wrap }
+.fiyat div { background:var(--kart); border:1px solid var(--cizgi); border-radius:14px; padding:12px 18px }
+.fiyat b { font-size:1.4rem; display:block }
+article { display:grid; grid-template-columns:220px 1fr; gap:20px; background:var(--kart); border:1px solid var(--cizgi); border-radius:18px; padding:16px; margin-bottom:16px }
+article img { width:100%; border-radius:12px; border:1px solid var(--cizgi); aspect-ratio:9/16; object-fit:cover; object-position:top }
+h2 small { font-weight:400; color:var(--soluk); font-size:.9rem }
+.meta { color:var(--soluk); margin:4px 0 8px }
+.ok, .uyari { font-size:.82rem; padding:3px 10px; border-radius:999px; display:inline-block }
+.ok { background:color-mix(in srgb, var(--vurgu) 15%, transparent); color:var(--vurgu) }
+.uyari { background:#f5a52422; color:#b4740a }
+textarea { width:100%; height:190px; margin:12px 0; padding:12px; border-radius:12px; border:1px solid var(--cizgi); background:var(--bg); color:var(--yazi); font:inherit; font-size:.88rem; resize:vertical }
+.eylem { display:flex; gap:8px; flex-wrap:wrap }
+.btn { padding:9px 16px; border-radius:999px; background:var(--vurgu); color:#fff; text-decoration:none; border:0; font:inherit; font-weight:600; cursor:pointer }
+.btn.ikincil { background:transparent; color:var(--yazi); border:1px solid var(--cizgi) }
+@media (max-width:640px) { article { grid-template-columns:1fr } article img { max-height:320px } }
+</style></head><body><div class="kap">
+<header><h1>Çerkezköy · Web Sitesi Teklif Panosu</h1>
+<p>Web sitesi bulunmayan, en çok yorum alan işletmeler. Mesajı göndermeden önce [Adınız] alanını doldurun ve site önizleme görselini mesaja ekleyin.</p></header>
+<div class="fiyat"><div>Kurulum<b>15.000 TL</b></div><div>Aylık bakım<b>1.000 TL</b></div><div>İşletme<b>6</b></div></div>
+
+<article>
+  <img src="mc-doner/onizleme.png" alt="MC Döner site önizlemesi" loading="lazy">
+  <div class="ic">
+    <h2>MC Döner <small>Çerkezköy</small></h2>
+    <p class="meta">Döner Restoranı · ★ 4,4 · 635+ yorum · +90 282 726 50 51</p>
+    <span class="uyari">Sabit hat · önce arayıp cep/WhatsApp numarası isteyin</span>
+    <textarea readonly>Merhaba, MC Döner Çerkezköy ekibi 👋
+
+Google&#x27;da 635+ yorumunuz ve 4,4 puanınız var ama bir web siteniz yok. Müşterileriniz sizi Google&#x27;da aradığında menünüzü, adresinizi ve telefonunuzu tek tıkla görebilsin diye işletmenize özel bir site tasarımı hazırladım (ekran görüntüsü ektedir).
+
+• Mobil uyumlu, size özel tasarım
+• Tek tıkla arama, WhatsApp ve yol tarifi
+• Alan adı kurulumu ve Google&#x27;da görünürlük
+
+Kurulum: 15.000 TL (tek seferlik)
+Bakım ve güncelleme: aylık 1.000 TL
+
+İsterseniz tasarımı birlikte sizin için son haline getirelim. İlgilenmiyorsanız &quot;HAYIR&quot; yazmanız yeterli, tekrar mesaj atmam.
+
+[Adınız Soyadınız] · [Telefonunuz]</textarea>
+    <div class="eylem"><a class="btn ikincil" href="mc-doner/index.html" target="_blank">Siteyi aç</a>
+    <button class="btn ikincil" onclick="kopyala(this)">Mesajı kopyala</button><a class="btn ikincil" href="tel:+902827265051">Ara (sabit hat)</a></div>
+  </div>
+</article>
+<article>
+  <img src="safinaz-doner/onizleme.png" alt="Safinaz Döner site önizlemesi" loading="lazy">
+  <div class="ic">
+    <h2>Safinaz Döner <small>Fast Food &amp; Döner</small></h2>
+    <p class="meta">Döner &amp; Fast Food · ★ 4,3 · 445+ yorum · +90 282 726 31 41</p>
+    <span class="uyari">Sabit hat · önce arayıp cep/WhatsApp numarası isteyin</span>
+    <textarea readonly>Merhaba, Safinaz Döner Fast Food &amp; Döner ekibi 👋
+
+Google&#x27;da 445+ yorumunuz ve 4,3 puanınız var ama bir web siteniz yok. Müşterileriniz sizi Google&#x27;da aradığında menünüzü, adresinizi ve telefonunuzu tek tıkla görebilsin diye işletmenize özel bir site tasarımı hazırladım (ekran görüntüsü ektedir).
+
+• Mobil uyumlu, size özel tasarım
+• Tek tıkla arama, WhatsApp ve yol tarifi
+• Alan adı kurulumu ve Google&#x27;da görünürlük
+
+Kurulum: 15.000 TL (tek seferlik)
+Bakım ve güncelleme: aylık 1.000 TL
+
+İsterseniz tasarımı birlikte sizin için son haline getirelim. İlgilenmiyorsanız &quot;HAYIR&quot; yazmanız yeterli, tekrar mesaj atmam.
+
+[Adınız Soyadınız] · [Telefonunuz]</textarea>
+    <div class="eylem"><a class="btn ikincil" href="safinaz-doner/index.html" target="_blank">Siteyi aç</a>
+    <button class="btn ikincil" onclick="kopyala(this)">Mesajı kopyala</button><a class="btn ikincil" href="tel:+902827263141">Ara (sabit hat)</a></div>
+  </div>
+</article>
+<article>
+  <img src="yeni-kardelen/onizleme.png" alt="Yeni Kardelen site önizlemesi" loading="lazy">
+  <div class="ic">
+    <h2>Yeni Kardelen <small>Pide · Lahmacun · Döner</small></h2>
+    <p class="meta">Pide &amp; Lahmacun Salonu · ★ 4,3 · 265+ yorum · +90 282 726 82 13</p>
+    <span class="uyari">Sabit hat · önce arayıp cep/WhatsApp numarası isteyin</span>
+    <textarea readonly>Merhaba, Yeni Kardelen Pide · Lahmacun · Döner ekibi 👋
+
+Google&#x27;da 265+ yorumunuz ve 4,3 puanınız var ama bir web siteniz yok. Müşterileriniz sizi Google&#x27;da aradığında menünüzü, adresinizi ve telefonunuzu tek tıkla görebilsin diye işletmenize özel bir site tasarımı hazırladım (ekran görüntüsü ektedir).
+
+• Mobil uyumlu, size özel tasarım
+• Tek tıkla arama, WhatsApp ve yol tarifi
+• Alan adı kurulumu ve Google&#x27;da görünürlük
+
+Kurulum: 15.000 TL (tek seferlik)
+Bakım ve güncelleme: aylık 1.000 TL
+
+İsterseniz tasarımı birlikte sizin için son haline getirelim. İlgilenmiyorsanız &quot;HAYIR&quot; yazmanız yeterli, tekrar mesaj atmam.
+
+[Adınız Soyadınız] · [Telefonunuz]</textarea>
+    <div class="eylem"><a class="btn ikincil" href="yeni-kardelen/index.html" target="_blank">Siteyi aç</a>
+    <button class="btn ikincil" onclick="kopyala(this)">Mesajı kopyala</button><a class="btn ikincil" href="tel:+902827268213">Ara (sabit hat)</a></div>
+  </div>
+</article>
+<article>
+  <img src="filozof-coffee/onizleme.png" alt="Filozof site önizlemesi" loading="lazy">
+  <div class="ic">
+    <h2>Filozof <small>Coffee &amp; Shop</small></h2>
+    <p class="meta">Kafe · ★ 4,4 · 245+ yorum · +90 538 350 34 34</p>
+    <span class="ok">Cep numarası · WhatsApp uygun</span>
+    <textarea readonly>Merhaba, Filozof Coffee &amp; Shop ekibi 👋
+
+Google&#x27;da 245+ yorumunuz ve 4,4 puanınız var ama bir web siteniz yok. Müşterileriniz sizi Google&#x27;da aradığında menünüzü, adresinizi ve telefonunuzu tek tıkla görebilsin diye işletmenize özel bir site tasarımı hazırladım (ekran görüntüsü ektedir).
+
+• Mobil uyumlu, size özel tasarım
+• Tek tıkla arama, WhatsApp ve yol tarifi
+• Alan adı kurulumu ve Google&#x27;da görünürlük
+
+Kurulum: 15.000 TL (tek seferlik)
+Bakım ve güncelleme: aylık 1.000 TL
+
+İsterseniz tasarımı birlikte sizin için son haline getirelim. İlgilenmiyorsanız &quot;HAYIR&quot; yazmanız yeterli, tekrar mesaj atmam.
+
+[Adınız Soyadınız] · [Telefonunuz]</textarea>
+    <div class="eylem"><a class="btn ikincil" href="filozof-coffee/index.html" target="_blank">Siteyi aç</a>
+    <button class="btn ikincil" onclick="kopyala(this)">Mesajı kopyala</button><a class="btn" href="https://wa.me/905383503434?text=Merhaba%2C%20Filozof%20Coffee%20%26%20Shop%20ekibi%20%F0%9F%91%8B%0A%0AGoogle%27da%20245%2B%20yorumunuz%20ve%204%2C4%20puan%C4%B1n%C4%B1z%20var%20ama%20bir%20web%20siteniz%20yok.%20M%C3%BC%C5%9Fterileriniz%20sizi%20Google%27da%20arad%C4%B1%C4%9F%C4%B1nda%20men%C3%BCn%C3%BCz%C3%BC%2C%20adresinizi%20ve%20telefonunuzu%20tek%20t%C4%B1kla%20g%C3%B6rebilsin%20diye%20i%C5%9Fletmenize%20%C3%B6zel%20bir%20site%20tasar%C4%B1m%C4%B1%20haz%C4%B1rlad%C4%B1m%20%28ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%20ektedir%29.%0A%0A%E2%80%A2%20Mobil%20uyumlu%2C%20size%20%C3%B6zel%20tasar%C4%B1m%0A%E2%80%A2%20Tek%20t%C4%B1kla%20arama%2C%20WhatsApp%20ve%20yol%20tarifi%0A%E2%80%A2%20Alan%20ad%C4%B1%20kurulumu%20ve%20Google%27da%20g%C3%B6r%C3%BCn%C3%BCrl%C3%BCk%0A%0AKurulum%3A%2015.000%20TL%20%28tek%20seferlik%29%0ABak%C4%B1m%20ve%20g%C3%BCncelleme%3A%20ayl%C4%B1k%201.000%20TL%0A%0A%C4%B0sterseniz%20tasar%C4%B1m%C4%B1%20birlikte%20sizin%20i%C3%A7in%20son%20haline%20getirelim.%20%C4%B0lgilenmiyorsan%C4%B1z%20%22HAYIR%22%20yazman%C4%B1z%20yeterli%2C%20tekrar%20mesaj%20atmam.%0A%0A%5BAd%C4%B1n%C4%B1z%20Soyad%C4%B1n%C4%B1z%5D%20%C2%B7%20%5BTelefonunuz%5D" target="_blank">WhatsApp'ta aç</a></div>
+  </div>
+</article>
+<article>
+  <img src="hk-bistro/onizleme.png" alt="HK Bistro site önizlemesi" loading="lazy">
+  <div class="ic">
+    <h2>HK Bistro <small>Kahvaltı &amp; Mutfak</small></h2>
+    <p class="meta">Bistro / Kahvaltı · ★ 4,4 · 210+ yorum · +90 532 203 12 60</p>
+    <span class="ok">Cep numarası · WhatsApp uygun</span>
+    <textarea readonly>Merhaba, HK Bistro Kahvaltı &amp; Mutfak ekibi 👋
+
+Google&#x27;da 210+ yorumunuz ve 4,4 puanınız var ama bir web siteniz yok. Müşterileriniz sizi Google&#x27;da aradığında menünüzü, adresinizi ve telefonunuzu tek tıkla görebilsin diye işletmenize özel bir site tasarımı hazırladım (ekran görüntüsü ektedir).
+
+• Mobil uyumlu, size özel tasarım
+• Tek tıkla arama, WhatsApp ve yol tarifi
+• Alan adı kurulumu ve Google&#x27;da görünürlük
+
+Kurulum: 15.000 TL (tek seferlik)
+Bakım ve güncelleme: aylık 1.000 TL
+
+İsterseniz tasarımı birlikte sizin için son haline getirelim. İlgilenmiyorsanız &quot;HAYIR&quot; yazmanız yeterli, tekrar mesaj atmam.
+
+[Adınız Soyadınız] · [Telefonunuz]</textarea>
+    <div class="eylem"><a class="btn ikincil" href="hk-bistro/index.html" target="_blank">Siteyi aç</a>
+    <button class="btn ikincil" onclick="kopyala(this)">Mesajı kopyala</button><a class="btn" href="https://wa.me/905322031260?text=Merhaba%2C%20HK%20Bistro%20Kahvalt%C4%B1%20%26%20Mutfak%20ekibi%20%F0%9F%91%8B%0A%0AGoogle%27da%20210%2B%20yorumunuz%20ve%204%2C4%20puan%C4%B1n%C4%B1z%20var%20ama%20bir%20web%20siteniz%20yok.%20M%C3%BC%C5%9Fterileriniz%20sizi%20Google%27da%20arad%C4%B1%C4%9F%C4%B1nda%20men%C3%BCn%C3%BCz%C3%BC%2C%20adresinizi%20ve%20telefonunuzu%20tek%20t%C4%B1kla%20g%C3%B6rebilsin%20diye%20i%C5%9Fletmenize%20%C3%B6zel%20bir%20site%20tasar%C4%B1m%C4%B1%20haz%C4%B1rlad%C4%B1m%20%28ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%20ektedir%29.%0A%0A%E2%80%A2%20Mobil%20uyumlu%2C%20size%20%C3%B6zel%20tasar%C4%B1m%0A%E2%80%A2%20Tek%20t%C4%B1kla%20arama%2C%20WhatsApp%20ve%20yol%20tarifi%0A%E2%80%A2%20Alan%20ad%C4%B1%20kurulumu%20ve%20Google%27da%20g%C3%B6r%C3%BCn%C3%BCrl%C3%BCk%0A%0AKurulum%3A%2015.000%20TL%20%28tek%20seferlik%29%0ABak%C4%B1m%20ve%20g%C3%BCncelleme%3A%20ayl%C4%B1k%201.000%20TL%0A%0A%C4%B0sterseniz%20tasar%C4%B1m%C4%B1%20birlikte%20sizin%20i%C3%A7in%20son%20haline%20getirelim.%20%C4%B0lgilenmiyorsan%C4%B1z%20%22HAYIR%22%20yazman%C4%B1z%20yeterli%2C%20tekrar%20mesaj%20atmam.%0A%0A%5BAd%C4%B1n%C4%B1z%20Soyad%C4%B1n%C4%B1z%5D%20%C2%B7%20%5BTelefonunuz%5D" target="_blank">WhatsApp'ta aç</a></div>
+  </div>
+</article>
+<article>
+  <img src="nihat-basar-kuafor/onizleme.png" alt="Nihat Başar site önizlemesi" loading="lazy">
+  <div class="ic">
+    <h2>Nihat Başar <small>Erkek Kuaförü</small></h2>
+    <p class="meta">Erkek Kuaförü · ★ 4,6 · 80+ yorum · +90 543 242 31 35</p>
+    <span class="ok">Cep numarası · WhatsApp uygun</span>
+    <textarea readonly>Merhaba, Nihat Başar Erkek Kuaförü ekibi 👋
+
+Google&#x27;da 80+ yorumunuz ve 4,6 puanınız var ama bir web siteniz yok. Müşterileriniz sizi Google&#x27;da aradığında menünüzü, adresinizi ve telefonunuzu tek tıkla görebilsin diye işletmenize özel bir site tasarımı hazırladım (ekran görüntüsü ektedir).
+
+• Mobil uyumlu, size özel tasarım
+• Tek tıkla arama, WhatsApp ve yol tarifi
+• Alan adı kurulumu ve Google&#x27;da görünürlük
+
+Kurulum: 15.000 TL (tek seferlik)
+Bakım ve güncelleme: aylık 1.000 TL
+
+İsterseniz tasarımı birlikte sizin için son haline getirelim. İlgilenmiyorsanız &quot;HAYIR&quot; yazmanız yeterli, tekrar mesaj atmam.
+
+[Adınız Soyadınız] · [Telefonunuz]</textarea>
+    <div class="eylem"><a class="btn ikincil" href="nihat-basar-kuafor/index.html" target="_blank">Siteyi aç</a>
+    <button class="btn ikincil" onclick="kopyala(this)">Mesajı kopyala</button><a class="btn" href="https://wa.me/905432423135?text=Merhaba%2C%20Nihat%20Ba%C5%9Far%20Erkek%20Kuaf%C3%B6r%C3%BC%20ekibi%20%F0%9F%91%8B%0A%0AGoogle%27da%2080%2B%20yorumunuz%20ve%204%2C6%20puan%C4%B1n%C4%B1z%20var%20ama%20bir%20web%20siteniz%20yok.%20M%C3%BC%C5%9Fterileriniz%20sizi%20Google%27da%20arad%C4%B1%C4%9F%C4%B1nda%20men%C3%BCn%C3%BCz%C3%BC%2C%20adresinizi%20ve%20telefonunuzu%20tek%20t%C4%B1kla%20g%C3%B6rebilsin%20diye%20i%C5%9Fletmenize%20%C3%B6zel%20bir%20site%20tasar%C4%B1m%C4%B1%20haz%C4%B1rlad%C4%B1m%20%28ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%20ektedir%29.%0A%0A%E2%80%A2%20Mobil%20uyumlu%2C%20size%20%C3%B6zel%20tasar%C4%B1m%0A%E2%80%A2%20Tek%20t%C4%B1kla%20arama%2C%20WhatsApp%20ve%20yol%20tarifi%0A%E2%80%A2%20Alan%20ad%C4%B1%20kurulumu%20ve%20Google%27da%20g%C3%B6r%C3%BCn%C3%BCrl%C3%BCk%0A%0AKurulum%3A%2015.000%20TL%20%28tek%20seferlik%29%0ABak%C4%B1m%20ve%20g%C3%BCncelleme%3A%20ayl%C4%B1k%201.000%20TL%0A%0A%C4%B0sterseniz%20tasar%C4%B1m%C4%B1%20birlikte%20sizin%20i%C3%A7in%20son%20haline%20getirelim.%20%C4%B0lgilenmiyorsan%C4%B1z%20%22HAYIR%22%20yazman%C4%B1z%20yeterli%2C%20tekrar%20mesaj%20atmam.%0A%0A%5BAd%C4%B1n%C4%B1z%20Soyad%C4%B1n%C4%B1z%5D%20%C2%B7%20%5BTelefonunuz%5D" target="_blank">WhatsApp'ta aç</a></div>
+  </div>
+</article>
+</div>
+<script>
+function kopyala(b) { const t = b.closest('article').querySelector('textarea'); navigator.clipboard.writeText(t.value).then(() => { b.textContent = 'Kopyalandı ✓'; setTimeout(() => b.textContent = 'Mesajı kopyala', 1500) }) }
+</script></body></html>

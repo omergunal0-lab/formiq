@@ -1,0 +1,62 @@
+[
+  {
+    "ad": "MC Döner",
+    "alt": "Çerkezköy",
+    "tur": "Döner Restoranı",
+    "puan": "4,4",
+    "yorum": "635+",
+    "tel": "+90 282 726 50 51",
+    "whatsapp": null,
+    "adres": "Atatürk Cad. No:57/1, Çerkezköy / Tekirdağ"
+  },
+  {
+    "ad": "Safinaz Döner",
+    "alt": "Fast Food & Döner",
+    "tur": "Döner & Fast Food",
+    "puan": "4,3",
+    "yorum": "445+",
+    "tel": "+90 282 726 31 41",
+    "whatsapp": null,
+    "adres": "Gazi Osman Paşa Mah., Atatürk Cad. No:97, Çerkezköy / Tekirdağ"
+  },
+  {
+    "ad": "Yeni Kardelen",
+    "alt": "Pide · Lahmacun · Döner",
+    "tur": "Pide & Lahmacun Salonu",
+    "puan": "4,3",
+    "yorum": "265+",
+    "tel": "+90 282 726 82 13",
+    "whatsapp": null,
+    "adres": "Çerkezköy / Tekirdağ"
+  },
+  {
+    "ad": "Filozof",
+    "alt": "Coffee & Shop",
+    "tur": "Kafe",
+    "puan": "4,4",
+    "yorum": "245+",
+    "tel": "+90 538 350 34 34",
+    "whatsapp": "905383503434",
+    "adres": "Gazi Osman Paşa Mah., Beyazsu Sk. No:60, Çerkezköy / Tekirdağ"
+  },
+  {
+    "ad": "HK Bistro",
+    "alt": "Kahvaltı & Mutfak",
+    "tur": "Bistro / Kahvaltı",
+    "puan": "4,4",
+    "yorum": "210+",
+    "tel": "+90 532 203 12 60",
+    "whatsapp": "905322031260",
+    "adres": "Namık Kemal Blv. No:9-11, Çerkezköy / Tekirdağ"
+  },
+  {
+    "ad": "Nihat Başar",
+    "alt": "Erkek Kuaförü",
+    "tur": "Erkek Kuaförü",
+    "puan": "4,6",
+    "yorum": "80+",
+    "tel": "+90 543 242 31 35",
+    "whatsapp": "905432423135",
+    "adres": "Çerkezköy / Tekirdağ"
+  }
+]

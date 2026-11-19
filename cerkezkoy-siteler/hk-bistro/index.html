@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HK Bistro Kahvaltı &amp; Mutfak | Çerkezköy</title>
+<meta name="description" content="HK Bistro – Bistro / Kahvaltı, Çerkezköy. Sakin bir sabah, taze bir sofra.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f1f3ec; --yuzey:#ffffff; --yazi:#1f2a24; --soluk:#5d6a61;
+  --vurgu:#3e6b4f; --vurgu2:#d39b4a;
+  --cizgi: color-mix(in srgb, var(--yazi) 12%, transparent);
+}
+* { box-sizing:border-box; margin:0; padding:0 }
+html { scroll-behavior:smooth }
+body { background:var(--bg); color:var(--yazi); font-family:'Inter', sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased }
+a { color:inherit }
+.kap { width:min(1120px, 100% - 32px); margin-inline:auto }
+h1,h2,h3 { font-family:'DM Serif Display', serif; line-height:1.05; font-weight:700 }
+.ust { position:sticky; top:0; z-index:5; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--cizgi) }
+.ust .kap { display:flex; align-items:center; justify-content:space-between; height:64px; gap:16px }
+.logo { font-family:'DM Serif Display', serif; font-size:1.5rem; text-decoration:none; letter-spacing:.02em }
+.logo span { color:var(--vurgu) }
+.ust nav { display:flex; gap:22px; font-size:.92rem }
+.ust nav a { text-decoration:none; color:var(--soluk) }
+.ust nav a:hover { color:var(--yazi) }
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 22px; border-radius:999px; background:var(--vurgu); color:#fff; font-weight:600; text-decoration:none; transition:transform .15s, box-shadow .15s }
+.btn:hover { transform:translateY(-2px); box-shadow:0 10px 24px -10px var(--vurgu) }
+.btn.ikincil { background:transparent; color:var(--yazi); border:1.5px solid var(--cizgi) }
+.hero { position:relative; overflow:hidden; padding:96px 0 88px; background:radial-gradient(circle at 100% 50%, transparent 20%, color-mix(in srgb, var(--vurgu) 9%, transparent) 21%, color-mix(in srgb, var(--vurgu) 9%, transparent) 34%, transparent 35%) 0 0/36px 36px }
+.hero::after { content:""; position:absolute; inset:auto -10% -40% auto; width:520px; aspect-ratio:1; border-radius:50%; background:radial-gradient(circle, color-mix(in srgb, var(--vurgu2) 35%, transparent), transparent 65%); pointer-events:none }
+.etiket { display:inline-flex; gap:8px; align-items:center; font-size:.85rem; font-weight:600; color:var(--vurgu); text-transform:uppercase; letter-spacing:.12em }
+.hero h1 { font-size:clamp(3rem, 9vw, 6.5rem); margin:14px 0 6px; max-width:12ch }
+.hero h1 em { font-style:normal; color:var(--vurgu) }
+.hero .alt { font-family:'DM Serif Display', serif; font-size:clamp(1.3rem, 3vw, 1.9rem); color:var(--soluk) }
+.hero p.slogan { font-size:1.15rem; max-width:46ch; margin:22px 0 32px; color:var(--soluk) }
+.eylem { display:flex; flex-wrap:wrap; gap:12px }
+.rozet { margin-top:40px; display:inline-flex; align-items:center; gap:14px; padding:12px 18px; border-radius:16px; background:var(--yuzey); border:1px solid var(--cizgi); position:relative; z-index:1 }
+.rozet b { font-size:1.6rem; font-family:'DM Serif Display', serif }
+.yildiz { color:var(--vurgu2); letter-spacing:2px }
+.rozet small { display:block; color:var(--soluk); font-size:.82rem }
+section { padding:88px 0 }
+.bolum-bas { display:flex; justify-content:space-between; align-items:end; gap:24px; margin-bottom:40px; flex-wrap:wrap }
+.bolum-bas h2 { font-size:clamp(2.2rem, 5vw, 3.4rem) }
+.bolum-bas p { color:var(--soluk); max-width:42ch }
+.hakkinda { background:var(--yuzey); border-block:1px solid var(--cizgi) }
+.hakkinda .kap { display:grid; grid-template-columns:1.1fr 1fr; gap:56px; align-items:center }
+.hakkinda p.buyuk { font-size:1.3rem; line-height:1.55 }
+.sayilar { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px }
+.sayilar div { padding:22px 16px; border-radius:18px; background:var(--bg); border:1px solid var(--cizgi) }
+.sayilar b { display:block; font-family:'DM Serif Display', serif; font-size:2.2rem; color:var(--vurgu) }
+.sayilar span { font-size:.85rem; color:var(--soluk) }
+.menu { list-style:none; display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px }
+.menu li { display:flex; gap:16px; padding:24px; border-radius:20px; background:var(--yuzey); border:1px solid var(--cizgi); transition:border-color .2s }
+.menu li:hover { border-color:var(--vurgu) }
+.menu .no { font-family:'DM Serif Display', serif; font-size:1.4rem; color:var(--vurgu2) }
+.menu h3 { font-size:1.35rem; margin-bottom:4px }
+.menu p { color:var(--soluk); font-size:.95rem }
+.not { margin-top:18px; font-size:.85rem; color:var(--soluk) }
+.iletisim .kap { display:grid; grid-template-columns:1fr 1.2fr; gap:32px }
+.kart { padding:32px; border-radius:24px; background:var(--yuzey); border:1px solid var(--cizgi); display:flex; flex-direction:column; gap:22px }
+.kart dt { font-size:.8rem; text-transform:uppercase; letter-spacing:.1em; color:var(--soluk) }
+.kart dd { font-size:1.15rem; font-weight:600; margin-top:2px }
+.kart dd a { text-decoration:none }
+.harita { border-radius:24px; overflow:hidden; border:1px solid var(--cizgi); min-height:360px }
+.harita iframe { width:100%; height:100%; min-height:360px; border:0;  }
+footer { padding:32px 0 100px; border-top:1px solid var(--cizgi); color:var(--soluk); font-size:.85rem }
+footer .kap { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap }
+.yuzen { position:fixed; right:16px; bottom:16px; z-index:9; display:none }
+.demo { position:fixed; left:16px; bottom:16px; z-index:9; font-size:.72rem; padding:6px 10px; border-radius:999px; background:var(--yazi); color:var(--bg); opacity:.75 }
+@media (max-width:820px) {
+  .ust nav { display:none }
+  .hero { padding:64px 0 56px }
+  section { padding:64px 0 }
+  .hakkinda .kap, .iletisim .kap { grid-template-columns:1fr; gap:32px }
+  .yuzen { display:inline-flex }
+  .demo { bottom:auto; top:72px }
+}
+</style>
+</head>
+<body>
+<header class="ust"><div class="kap">
+  <a class="logo" href="#">HK Bistro<span>.</span></a>
+  <nav><a href="#hakkinda">Hakkımızda</a><a href="#menu">Menü</a><a href="#iletisim">İletişim</a></nav>
+  <a class="btn" href="tel:+905322031260">Hemen Ara</a>
+</div></header>
+
+<main>
+<section class="hero"><div class="kap">
+  <span class="etiket">● Bistro / Kahvaltı · Çerkezköy</span>
+  <h1>HK Bistro<em>.</em></h1>
+  <div class="alt">Kahvaltı &amp; Mutfak</div>
+  <p class="slogan">Sakin bir sabah, taze bir sofra.</p>
+  <div class="eylem">
+    <a class="btn" href="tel:+905322031260">Sipariş / Rezervasyon</a>
+    <a class="btn ikincil" href="https://wa.me/905322031260">WhatsApp</a>
+    <a class="btn ikincil" href="#iletisim">Yol Tarifi</a>
+  </div>
+  <div class="rozet"><b>4,4</b><div><span class="yildiz">★★★★★</span><small>Google'da 210+ değerlendirme</small></div></div>
+</div></section>
+
+<section class="hakkinda" id="hakkinda"><div class="kap">
+  <div>
+    <span class="etiket">Hakkımızda</span>
+    <h2 style="font-size:clamp(2rem,4.5vw,3rem);margin:12px 0 18px">Çerkezköy'ün sevdiği adres</h2>
+    <p class="buyuk">Köy ürünleriyle hazırlanan serpme kahvaltı, gün boyu sıcak yemekler ve huzurlu bir ortam. Hafta sonu kahvaltıları için rezervasyon önerilir.</p>
+  </div>
+  <div class="sayilar">
+    <div><b>4,4</b><span>Google puanı</span></div>
+    <div><b>210+</b><span>Müşteri yorumu</span></div>
+    <div><b>7/24</b><span>Online erişim</span></div>
+  </div>
+</div></section>
+
+<section id="menu"><div class="kap">
+  <div class="bolum-bas"><h2>Öne Çıkanlar</h2><p>Günlük taze hazırlanan lezzetlerimizden bir seçki.</p></div>
+  <ul class="menu"><li><span class="no">01</span><div><h3>Serpme Kahvaltı</h3><p>2 kişilik ve üzeri</p></div></li>
+<li><span class="no">02</span><div><h3>Kahvaltı Tabağı</h3><p>Tek kişilik</p></div></li>
+<li><span class="no">03</span><div><h3>Menemen &amp; Sahanda</h3><p>Tereyağında</p></div></li>
+<li><span class="no">04</span><div><h3>Makarna Çeşitleri</h3><p>Gün boyu</p></div></li>
+<li><span class="no">05</span><div><h3>Izgara Tavuk</h3><p>Mevsim salata ile</p></div></li>
+<li><span class="no">06</span><div><h3>Tatlı &amp; Kahve</h3><p>Ev yapımı</p></div></li></ul>
+  <p class="not">Güncel menü ve fiyatlar için bizi arayabilirsiniz.</p>
+</div></section>
+
+<section class="iletisim" id="iletisim"><div class="kap">
+  <dl class="kart">
+    <span class="etiket">İletişim</span>
+    <div><dt>Telefon</dt><dd><a href="tel:+905322031260">+90 532 203 12 60</a></dd></div>
+    <div><dt>Adres</dt><dd>Namık Kemal Blv. No:9-11, Çerkezköy / Tekirdağ</dd></div>
+    
+    <div class="eylem"><a class="btn" href="tel:+905322031260">Ara</a><a class="btn ikincil" href="https://wa.me/905322031260">WhatsApp</a><a class="btn ikincil" href="https://www.google.com/maps/search/?api=1&query=HK%20Bistro%20Nam%C4%B1k%20Kemal%20Blv.%20No%3A9-11%2C%20%C3%87erkezk%C3%B6y%20/%20Tekirda%C4%9F">Haritada Aç</a></div>
+  </dl>
+  <div class="harita"><iframe loading="lazy" title="Harita" src="https://maps.google.com/maps?q=HK%20Bistro%20Kahvalt%C4%B1%20%26%20Mutfak%20Nam%C4%B1k%20Kemal%20Blv.%20No%3A9-11%2C%20%C3%87erkezk%C3%B6y%20/%20Tekirda%C4%9F&output=embed"></iframe></div>
+</div></section>
+</main>
+
+<footer><div class="kap"><span>© 2026 HK Bistro Kahvaltı &amp; Mutfak · Çerkezköy</span><span>Tüm hakları saklıdır.</span></div></footer>
+<a class="btn yuzen" href="https://wa.me/905322031260">WhatsApp</a>
+<span class="demo">Tanıtım tasarımı</span>
+</body>
+</html>
